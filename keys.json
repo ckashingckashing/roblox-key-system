@@ -1,0 +1,116 @@
+[
+  {
+    "key": "M9LACF5I",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": null
+  },
+  {
+    "key": "N4JGA9XU",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": null
+  },
+  {
+    "key": "Q7CYMWY6",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": null
+  },
+  {
+    "key": "HEWV20IW",
+    "used": true,
+    "boundTo": "User123",
+    "expiresAt": "2025-06-14T01:41:22.016Z"
+  },
+  {
+    "key": "7N31W55Q",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": "2025-12-31T23:59:59.000Z"
+  },
+  {
+    "key": "BZRY5Q8A",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": null
+  },
+  {
+    "key": "3RH9XHAA",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": null
+  },
+  {
+    "key": "J6D3OI7D",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": "2025-12-31T23:59:59.000Z"
+  },
+  {
+    "key": "K9GE9MZM",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": "2025-12-31T23:59:59.000Z"
+  },
+  {
+    "key": "BRS8X0ZR",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": "2025-12-31T23:59:59.000Z"
+  },
+  {
+    "key": "FFERE7F7",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": "2025-12-31T23:59:59.000Z"
+  },
+  {
+    "key": "HTCIQ5XN",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": "2025-06-14T01:44:17.279Z"
+  },
+  {
+    "key": "S0KTS257",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": "",
+    "createdAt": "2025-06-14T01:49:20.892Z"
+  },
+  {
+    "key": "DC25IE2I",
+    "used": false,
+    "boundTo": null,
+    "expiresAt": "",
+    "createdAt": "2025-06-14T01:49:24.245Z"
+  },
+  {
+    "key": "JEJAOKIA",
+    "used": true,
+    "boundTo": null,
+    "expiresAt": "2025-06-14T01:49:44.217Z",
+    "createdAt": "2025-06-14T01:49:25.765Z"
+  },
+  {
+    "key": "RXRGKD58",
+    "used": true,
+    "boundTo": null,
+    "expiresAt": "2025-06-14T01:50:36.175Z",
+    "createdAt": "2025-06-14T01:50:17.246Z"
+  },
+  {
+    "key": "X4WSFUW2",
+    "used": true,
+    "boundTo": "12345",
+    "expiresAt": "2025-06-14T01:51:17.951Z",
+    "createdAt": "2025-06-14T01:50:59.071Z"
+  },
+  {
+    "key": "VSIWQVYY",
+    "used": true,
+    "boundTo": "12345",
+    "expiresAt": "2025-12-31T23:59:59.000Z",
+    "createdAt": "2025-06-14T01:51:48.686Z"
+  }
+]

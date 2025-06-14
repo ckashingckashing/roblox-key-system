@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🔐 Admin Panel - Roblox Key System</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5ff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #aaa;
+    }
+    h1 {
+      color: #333;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      border: none;
+      background: #6a5acd;
+      color: white;
+      border-radius: 6px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    pre {
+      background: #222;
+      color: #0f0;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔐 Admin Panel</h1>
+
+  <h2>View All Keys</h2>
+  <button onclick="viewKeys()">Refresh Key List</button>
+  <pre id="keyOutput">...</pre>
+
+  <h2>Generate New Key</h2>
+  <label>Expiry Date (ISO):</label>
+  <input type="text" id="expiryInput" placeholder="2025-12-31T23:59:59.000Z">
+  <button onclick="generateKey()">Generate</button>
+  <pre id="genOutput">...</pre>
+
+  <h2>Revoke Key</h2>
+  <label>Enter Key to Revoke:</label>
+  <input type="text" id="revokeInput" placeholder="Enter Key">
+  <button onclick="revokeKey()">Revoke</button>
+  <pre id="revokeOutput">...</pre>
+
+  <h2>Logs</h2>
+  <button onclick="viewLogs()">View Logs</button>
+  <pre id="logsOutput">...</pre>
+
+  <script>
+    async function viewKeys() {
+      const res = await fetch('/adminkeys');
+      const keys = await res.json();
+
+      let output = '';
+      keys.forEach(key => {
+        const expired = key.expiresAt && new Date(key.expiresAt) < new Date();
+        output += `
+🔑 Key: ${key.key}
+🧾 Used: ${key.used ? '✅ Yes' : '❌ No'}
+🧠 Bound To: ${key.boundTo || '—'}
+⏳ Expires At: ${key.expiresAt || 'Never'}
+📅 Created At: ${key.createdAt || 'Unknown'}
+📌 Status: ${expired ? '❌ Expired' : '✅ Active'}
+-------------------------------`;
+      });
+
+      document.getElementById('keyOutput').textContent = output.trim();
+    }
+
+    async function generateKey() {
+      const expiry = document.getElementById('expiryInput').value;
+      const res = await fetch('/adminkeys/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ expiresAt: expiry })
+      });
+      const data = await res.json();
+      document.getElementById('genOutput').textContent = JSON.stringify(data, null, 2);
+      viewKeys(); // refresh key list
+    }
+
+    async function revokeKey() {
+      const key = document.getElementById('revokeInput').value;
+      const res = await fetch('/adminkeys/revoke', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: key })
+      });
+      const data = await res.json();
+      document.getElementById('revokeOutput').textContent = JSON.stringify(data, null, 2);
+      viewKeys(); // refresh key list
+    }
+
+    async function viewLogs() {
+      const res = await fetch('/adminkeys/logs');
+      const data = await res.json();
+      document.getElementById('logsOutput').textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
