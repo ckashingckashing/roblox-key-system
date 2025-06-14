@@ -3,104 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your Key</title>
+  <title>🎯 Roblox Key System</title>
   <style>
     body {
-      font-family: "Segoe UI", sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px;
-      background: #f8f9fa;
-      color: #333;
-    }
-
-    .container {
-      background: white;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
+      font-family: sans-serif;
       text-align: center;
+      padding: 40px;
+      background: #f9f9f9;
     }
-
-    h1 {
-      color: #7b2cbf;
-    }
-
-    .key-box {
-      background: #eee;
-      padding: 10px 15px;
-      border-radius: 8px;
+    #keyBox {
+      font-size: 20px;
       font-weight: bold;
-      margin: 10px 0;
-      font-size: 18px;
-      word-break: break-all;
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 2px dashed #ccc;
+      background: white;
     }
-
     button {
-      background: #7b2cbf;
-      color: white;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
+      padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
     }
-
-    button:hover {
-      background: #5a189a;
-    }
-
-    .info {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #555;
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎯 Roblox Key System</h1>
-    <p>Valid for 12 hours. Below are your active keys:</p>
-    <div class="key-box" id="keyBox">Loading...</div>
-    <button onclick="copyKey()">📋 Copy Key</button>
-    <div class="info" id="infoBox">Checking status...</div>
-  </div>
+  <h1>🎯 Roblox Key System</h1>
+  <div id="keyBox">Loading key info...</div>
+  <button onclick="copyKey()">📋 Copy Key</button>
+  <div id="result"></div>
 
   <script>
-    const url = new URL(window.location.href);
-    const key = url.searchParams.get("key");
-    const userid = url.searchParams.get("userid");
+    const urlParams = new URLSearchParams(window.location.search);
+    const key = urlParams.get('key');
+    const userid = urlParams.get('userid');
 
-    const keyBox = document.getElementById("keyBox");
-    const infoBox = document.getElementById("infoBox");
+    // ✅ Your real server URL:
+    const apiBase = "https://roblox-key-system-hf8x.onrender.com";
 
-    if (!key || !userid) {
-      keyBox.innerText = "❌ Missing key or userid.";
-      infoBox.innerText = "Make sure the link contains both key and userid.";
-    } else {
-      keyBox.innerText = key;
+    document.getElementById("keyBox").textContent = key;
 
-      fetch(`/checkkey?key=${key}&userid=${userid}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            infoBox.innerText = data.message;
-          } else {
-            infoBox.innerText = "❌ " + data.message;
-          }
-        })
-        .catch(() => {
-          infoBox.innerText = "❌ Failed to check key.";
-        });
+    async function verifyKey() {
+      const resultDiv = document.getElementById("result");
+      try {
+        const response = await fetch(`${apiBase}/checkkey?key=${key}&userid=${userid}`);
+        const data = await response.json();
+        console.log("✅ Server response:", data);
+        resultDiv.textContent = data.message;
+        resultDiv.style.color = data.success ? "green" : "red";
+      } catch (error) {
+        console.error("❌ Error contacting server:", error);
+        resultDiv.textContent = "❌ Error contacting server.";
+        resultDiv.style.color = "red";
+      }
     }
 
     function copyKey() {
-      navigator.clipboard.writeText(key).then(() => {
-        alert("✅ Key copied to clipboard!");
-      });
+      navigator.clipboard.writeText(key);
+      alert("✅ Key copied to clipboard!");
     }
+
+    verifyKey();
   </script>
 </body>
 </html>
