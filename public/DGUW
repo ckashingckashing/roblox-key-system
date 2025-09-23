@@ -46,7 +46,8 @@ task.wait(1) -- wait 1 second before running
 
 -- Teleport to map 50016
 ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer({["mapId"] = 50016})
-task.wait(2) -- small wait for teleport to load
+
+task.wait(2) -- wait 2 seconds for teleport to load
 
 -- Check for enemies
 local enemysFolder = workspace:FindFirstChild("Enemys")
@@ -58,7 +59,7 @@ else
     -- Activate kill aura
     loadstring(game:HttpGet("https://raw.githubusercontent.com/ckashckash/ckashinggg/refs/heads/main/AutofarmV2"))()
 
-    -- Check Floor message
+    -- Monitor floor progress
     local floorPart = workspace:WaitForChild("Maps"):WaitForChild("Tower"):WaitForChild("Map"):WaitForChild("MessageBoard"):WaitForChild("Part"):WaitForChild("SurfaceGui"):WaitForChild("Bg"):WaitForChild("Floor")
     task.spawn(function()
         while true do
