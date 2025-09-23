@@ -42,7 +42,7 @@ local function serverHop()
 end
 
 -- Main logic
-task.wait(3)
+task.wait(5)
 
 -- Teleport to map 50016
 ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer({mapId = 50016})
