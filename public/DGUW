@@ -1,0 +1,73 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+local StarterGui = game:GetService("StarterGui")
+
+local localPlayer = Players.LocalPlayer
+
+-- Helper notification function
+local function notify(title, text, duration)
+    StarterGui:SetCore("SendNotification", {
+        Title = title,
+        Text = text,
+        Duration = duration or 3
+    })
+end
+
+-- Server hop function
+local function serverHop()
+    local servers = {}
+    local success, result = pcall(function()
+        return HttpService:JSONDecode(
+            game:HttpGet("https://games.roblox.com/v1/games/" .. game.PlaceId .. "/servers/Public?sortOrder=Asc&limit=100")
+        )
+    end)
+
+    if success and result and result.data then
+        for _, server in ipairs(result.data) do
+            if server.playing < server.maxPlayers then
+                table.insert(servers, server)
+            end
+        end
+    end
+
+    if #servers > 0 then
+        local randomServer = servers[math.random(1, #servers)]
+        notify("Server Hop", "Teleporting to new server...", 3)
+        TeleportService:TeleportToPlaceInstance(game.PlaceId, randomServer.id, localPlayer)
+    else
+        notify("Server Hop Failed", "No available servers found.", 4)
+    end
+end
+
+-- Main logic
+task.wait(1) -- wait 1 second before running
+-- Teleport to map 50016
+ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer({["mapId"] = 50016})
+task.wait(2) -- small wait for teleport to load
+
+-- Check for enemies
+local enemysFolder = workspace:FindFirstChild("Enemys")
+if not enemysFolder or #enemysFolder:GetChildren() == 0 then
+    notify("No Enemies", "Server hopping...", 3)
+    serverHop()
+else
+    notify("Enemies Found", "Starting kill aura...", 3)
+    -- Activate kill aura
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ckashckash/ckashinggg/refs/heads/main/AutofarmV2"))()
+    
+    -- Check Floor message
+    local floorPart = workspace:WaitForChild("Maps"):WaitForChild("Tower"):WaitForChild("Map"):WaitForChild("MessageBoard"):WaitForChild("Part"):WaitForChild("SurfaceGui"):WaitForChild("Bg"):WaitForChild("Floor")
+    task.spawn(function()
+        while true do
+            local floorText = tonumber(floorPart.Text) or 0
+            if floorText >= 10 then
+                notify("Floor 75 Reached", "Server hopping...", 4)
+                serverHop()
+                break
+            end
+            task.wait(1)
+        end
+    end)
+end
