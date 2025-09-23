@@ -47,20 +47,29 @@ task.wait(1) -- wait 1 second before running
 -- Teleport to map 50016
 ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("LocalPlayerTeleport"):FireServer({["mapId"] = 50016})
 
-task.wait(2) -- wait 2 seconds for teleport to load
+-- Wait until the map actually exists
+repeat
+    task.wait(1)
+until workspace:FindFirstChild("Maps") and workspace.Maps:FindFirstChild("Tower") and workspace.Maps.Tower:FindFirstChild("Map")
 
--- Check for enemies
-local enemysFolder = workspace:FindFirstChild("Enemys")
-if not enemysFolder or #enemysFolder:GetChildren() == 0 then
-    notify("No Enemies", "Server hopping...", 3)
-    serverHop()
+task.wait(2) -- optional extra buffer
+
+-- Check floor number first
+local floorPart = workspace:WaitForChild("Maps"):WaitForChild("Tower"):WaitForChild("Map"):WaitForChild("MessageBoard"):WaitForChild("Part"):WaitForChild("SurfaceGui"):WaitForChild("Bg"):WaitForChild("Floor")
+local currentFloor = tonumber(floorPart.Text) or 0
+
+if currentFloor == 99 then
+    -- Only check enemies if floor is 99
+    local enemysFolder = workspace:FindFirstChild("Enemys")
+    if not enemysFolder or #enemysFolder:GetChildren() == 0 then
+        notify("No Enemies", "Server hopping...", 3)
+        serverHop()
+    else
+        notify("Enemies Found", "Starting kill aura...", 3)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ckashckash/ckashinggg/refs/heads/main/AutofarmV2"))()
+    end
 else
-    notify("Enemies Found", "Starting kill aura...", 3)
-    -- Activate kill aura
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/ckashckash/ckashinggg/refs/heads/main/AutofarmV2"))()
-
-    -- Monitor floor progress
-    local floorPart = workspace:WaitForChild("Maps"):WaitForChild("Tower"):WaitForChild("Map"):WaitForChild("MessageBoard"):WaitForChild("Part"):WaitForChild("SurfaceGui"):WaitForChild("Bg"):WaitForChild("Floor")
+    -- For floors < 99, you can still monitor for 75–98 for server hop
     task.spawn(function()
         while true do
             local floorText = tonumber(floorPart.Text) or 0
