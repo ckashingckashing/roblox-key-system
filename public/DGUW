@@ -70,6 +70,7 @@ if enemysFolder and #enemysFolder:GetChildren() > 0 then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/ckashckash/ckashinggg/refs/heads/main/AutofarmV2"))()
 else
     notify("No Enemies", "Server hopping...", 3)
+    task.wait(3)
     serverHop()
 end
 
@@ -77,8 +78,9 @@ end
 task.spawn(function()
     while true do
         local currentFloor = tonumber(floorPart.Text) or 0
-        if currentFloor >= 75 and currentFloor < 99 then
-            notify("Floor 75 Reached", "Server hopping...", 4)
+        if currentFloor >= 86 and currentFloor < 99 then
+            notify("Floor 86 Reached", "Server hopping...", 4)
+            task.wait(5)
             serverHop()
             break
         end
